@@ -1,0 +1,59 @@
+{% extends 'dashboard/base.html' %}
+{% block body %}
+
+         <div class="col-md-8">
+        <div class="row">
+       <div class="col-md-12">
+          
+
+           <h1>Site Setting</h1>
+             <form action="{% url 'setting' %}" method="post" enctype="multipart/form-data">
+             {% csrf_token %}
+                 <label>Site Title</label>
+                 <input type="text" name="title" value="{{data.SiteTitle}}" placeholder="Enter Title" class="form-control" >
+                 <label>Site Logo</label>
+                 <input type="file" name="logo"  class="form-control" >
+                 <label>Site Favicon</label>
+                 <input type="file" name="favicon"  class="form-control" >
+                 <label>Description</label>
+       <textarea class="form-control" name="desc" style="height:300px; resize:none;">
+          {{data.SiteDesc}}
+       </textarea><br><br>
+            <input type="submit" name="update" value="Save" class="btn btn-primary center-block">
+             </form>
+              </div>
+
+<div class="col-md-4">
+   <h1 align="center">Website Logo</h1>
+    <img src="/upload/{{data.SiteLogo}}" alt="Site Logo" width="100%">
+</div>
+<div class="col-md-4">
+   <h1 align="center">Website Favicon</h1>
+    <img src="/upload/{{data.SiteFavicon}}"  class="center-block" width="100px">
+</div>
+<div class="col-md-12">
+    <h1>Account Setting</h1>
+    
+    <form action="{% url 'user' %}" method="post">
+        {% csrf_token %}
+     <label>Username  {{user.Username}}</label> 
+     <input type="text" name="username" value="{{user.Username}}" class="form-control" placeholder="Enter User Name" required>
+     <label>Email {{user.Email}}</label>
+     <input type="Email" name="email" value="{{user.Email}}"class="form-control" placeholder="Enter Email Address" required>
+     <label>Password </label> <span>Password is Encrypted <a href="javascript:void(0)" id="pwd">Change Password</a> </span>
+     <input type="text" name="password" class="form-control" placeholder="Enter Password Password" >  <br>
+     <input type="submit" name="submit" value="Update" class="btn btn-primary center-block" >
+    </form>
+   
+</div>
+</div>
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+{% block script %}
+
+{% endblock script %}

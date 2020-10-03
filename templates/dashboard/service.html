@@ -1,0 +1,174 @@
+{% extends 'dashboard/base.html' %}
+{% block body %}
+
+<!--admin body-->
+
+         <div class="col-md-8">
+   
+    
+        <div class="row">
+            
+        <div class="col-lg-12 col-md-12">
+     
+    
+    
+  <div class="col-md-7">
+   <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Service</th>
+        <th>Delete</th>
+        <th>Update</th>
+        
+      </tr>
+    </thead>
+    <tbody id="servicedata">
+    </tbody>
+  </table>
+ </div>
+
+  
+  <div class="col-md-5">
+      <h1>Services Form</h1>
+      <form action="{% url 'inserservice' %} " method="post" id='insertservice'>
+          {% csrf_token %}
+        <label>Title</label>
+        <input type="text" name="title" id="title" value="" placeholder="Enter Service Title" class="form-control" required>
+        <label>Description</label>
+        <input type="text" name="desc" id="desc" value="" placeholder="Enter Service Description" class="form-control" required>
+       <label>Icon Code</label> <a href="https://lineicons.com/icons" target="_blank"> Icon Cheat Sheet</a>
+        <input type="text" name="icon" id="icon" value="" placeholder="Enter Service icon css code" class="form-control" required> <br>
+        <input type="submit" name="submit" value="Insert" class="btn btn-primary center-block">
+      
+       
+    </form>
+     </div>
+<!--End Category Start-->
+</div><!--/admin body-->
+
+</div>
+         </div>
+    </div>
+</section>
+<div id="updateModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Insert Skills</h4>
+        </div>
+        <div class="modal-body">
+        <form action=" {% url 'updateservice' %} " method="post" id="updateservice">
+            {% csrf_token %}
+        <input type="hidden" name="id" id="uid">
+        <label>Title</label>
+        <input type="text" name="title" id="utitle" value="" placeholder="Enter Service Title" class="form-control" required>
+        <label>Description</label>
+        <input type="text" name="desc" id="udesc" value="" placeholder="Enter Service Description" class="form-control" required>
+       <label>Icon Code</label> <a href="https://lineicons.com/icons" target="_blank"> Icon Cheat Sheet</a>
+        <input type="text" name="icon" id="uicon" value="" placeholder="Enter Service icon css code" class="form-control" required> <br>
+       
+        </div>
+        <div class="modal-footer">
+          
+          <input type="submit" value="Update"  class="btn btn-primary">
+        </form>
+        </div>
+      </div>
+      </div>
+      </div>
+{% endblock %}
+
+
+{% block script %}
+  <script>
+      $(document).ready(function(){
+        showservice();
+          $('#insertservice').ajaxForm(function(data){
+            alert(data)
+           $('#title').val('');
+           $('#desc').val('');
+           $('#icon').val('');
+          
+            showservice();
+          });
+
+          // Update skills
+          $('#updateservice').ajaxForm(function(){
+            $('#updateModal').modal('toggle');
+            $('#utitle').val('');
+           $('#udesc').val('');
+           $('#uicon').val('');
+            showservice();
+          })
+      });
+    //   end read functionl
+    function showservice(){
+      var element ="";
+      $.ajax({
+        url:'showservice',
+        type:'GET',
+        success: function(data){
+            
+
+
+         var alldata = eval(data);
+          for(var x=0 ; x<alldata.length; x++){
+         
+            element+=`
+            <tr>
+       
+       <td>${x}</td>
+       <td>${ alldata[x].ServiceTitle }</td>
+      
+
+       <td><a href="#" onclick="deleteservice(${alldata[x].ServiceId})">Delete</a></td>
+       <td><a href="#" data-toggle="modal" data-target="#updateModal" onclick='updatedata(${alldata[x].ServiceId})'>Update</a></td>
+
+  
+        </tr>
+
+            `;
+            
+          }
+          $('#servicedata').html(element)
+        }
+      });
+    }
+    // delete skill
+  function deleteservice(x){
+  
+    $.ajax({
+      url:'deleteservice',
+      type:'GET',
+      data:{
+        'id':x,
+      },
+      success: function(data){
+        showservice();
+      }
+    })
+  }
+
+  // update data
+  function updatedata(x){
+     
+   $.ajax({
+     url:'updateservice',
+     type:'GET',
+     data:{'id': x},
+     success: function(data){
+        var datas= eval(data);
+       
+       $('#utitle').val(datas[0].ServiceTitle);
+       $('#udesc').val(datas[0].ServiceDesc);
+       $('#uicon').val(datas[0].ServiceIcon);
+       $('#uid').val(datas[0].ServiceId);
+     }
+   })
+  }
+  </script>
+{% endblock script %}

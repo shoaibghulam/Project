@@ -1,0 +1,169 @@
+{% extends 'dashboard/base.html' %}
+{% block body %}
+
+<div class="col-md-8">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Insert Skill</button>
+ 
+  
+   <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Skill</th>
+        <th>Knowledge</th>
+        <th>Delete</th>
+        <th>Update</th>
+        
+      </tr>
+    </thead>
+    <tbody id="skilldata">
+       
+       
+          
+    </tbody>
+  </table>
+ 
+</div>  
+<!-- Model start  -->
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Insert Skills</h4>
+        </div>
+        <div class="modal-body">
+        <form action=" {% url 'insertskill' %} " method="post" id="skillinsert">
+           {% csrf_token %}
+           <label for="title">Title</label>
+           <input type="text" name="Title" id="title" placeholder="Enter Title" class="form-control" required>
+           <label for="position">Position</label>
+           <input type="number" name="Position" id="position" placeholder="Enter Position 0 to 100" class="form-control" max=100 required>
+          
+        </div>
+        <div class="modal-footer">
+          
+          <input type="submit" value="Insert"  class="btn btn-primary">
+        </form>
+        </div>
+      </div>
+      </div>
+      </div>
+<!-- Model End -->
+
+<!-- update Model start --><div id="updateModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Update Skills</h4>
+        </div>
+        <div class="modal-body">
+        <form action=" {% url 'updateskill' %} " method="post" id="updateskill">
+           {% csrf_token %}
+           <input type="hidden" name="Id" id="uid">
+           <label for="utitle">Title</label>
+           <input type="text" name="Title" id="utitle" placeholder="Enter Title" class="form-control" required>
+           <label for="uposition">Position</label>
+           <input type="number" name="Position" id="uposition" placeholder="Enter Position 0 to 100" class="form-control" max=100 required>
+          
+        </div>
+        <div class="modal-footer">
+          
+          <input type="submit" value="Update"  class="btn btn-primary">
+        </form>
+        </div>
+      </div>
+      </div>
+      </div>
+
+<!-- update Model end -->
+{% endblock  %}
+{% block script %}
+  <script>
+      $(document).ready(function(){
+        showskills();
+          $('#skillinsert').ajaxForm(function(data){
+            $('#myModal').modal('toggle');
+            $('#position').val('');
+            $('#title').val('');
+          
+            showskills();
+          });
+
+          // Update skills
+          $('#updateskill').ajaxForm(function(){
+            $('#updateModal').modal('toggle');
+            $('#uposition').val('');
+            $('#utitle').val('');
+            showskills();
+          })
+      });
+    //   end read functionl
+    function showskills(){
+      var element ="";
+      $.ajax({
+        url:'showskill',
+        type:'GET',
+        success: function(data){
+        
+         var alldata = eval(data);
+          for(var x=0 ; x<alldata.length; x++){
+         
+            element+=`
+            <tr>
+       
+       <td>${x}</td>
+       <td>${ alldata[x].SkillTitle }</td>
+       <td>${ alldata[x].SkillPosition}</td>
+
+       <td><a href="#" onclick="deleteskill(${alldata[x].SkillId})">Delete</a></td>
+       <td><a href="#" data-toggle="modal" data-target="#updateModal" onclick='updatedata(${alldata[x].SkillId})'>Update</a></td>
+
+  
+        </tr>
+
+            `;
+            
+          }
+          $('#skilldata').html(element)
+        }
+      });
+    }
+    // delete skill
+  function deleteskill(x){
+  
+    $.ajax({
+      url:'skilldelete',
+      type:'GET',
+      data:{
+        'id':x,
+      },
+      success: function(data){
+        showskills();
+      }
+    })
+  }
+
+  // update data
+  function updatedata(x){
+   $.ajax({
+     url:'updateskill',
+     type:'GET',
+     data:{'id': x},
+     success: function(data){
+        var datas= eval(data);
+       
+       $('#utitle').val(datas[0].SkillTitle);
+       $('#uposition').val(datas[0].SkillPosition);
+       $('#uid').val(datas[0].SkillId);
+     }
+   })
+  }
+  </script>
+{% endblock script %}

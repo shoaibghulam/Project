@@ -1,0 +1,57 @@
+{% extends 'dashboard/base.html' %}
+{% block body %}
+
+ <div class="col-md-5">
+
+<form action="{% url 'dashboard' %}" method="post" enctype="multipart/form-data">
+    <label>Name:</label>
+    <input type="text" name="name" value="{{data.Name}}" placeholder="Enter Name" class="form-control" required>
+    <label>Profession:</label>
+    <input type="text" name="profession" value="{{data.Profession}}" placeholder="Enter profession" class="form-control" required>
+    <label>Facebook:</label>
+    <input type="text" name="fb" value="{{data.Fb}}" placeholder="Enter Facebook" class="form-control" required>
+    <label>Twitter:</label>
+    <input type="text" name="Twitter" value="{{data.Twitter}}" placeholder="Enter Twitter" class="form-control" required>
+    <label>Instgram:</label>
+    <input type="text" name="Instgram" value="{{data.Instgram}}" placeholder="Enter Instgram" class="form-control" required>
+    <label>Linkedlist:</label>
+    <input type="text" name="linkedlist" value="{{data.Linkedlist}}" placeholder="Enter Name" class="form-control" required>
+   
+    <label>DOB:</label>
+    <input type="text" name="DOB" value="{{data.Dob}}" placeholder="example 12 Dec 1996" class="form-control" required>
+    <label>Email:</label>
+    <input type="Email" name="Email" value="{{ data.Email }}" placeholder="Enter Email" class="form-control" required>
+    <label>Contact No:</label>
+    <input type="text" name="contact" value="{{data.Contact}}" placeholder="Enter Email" class="form-control" required>
+    <label>Address:</label>
+    <input type="text" name="address" value="{{data.Address}}" placeholder="Enter Address" class="form-control" required>
+      {% csrf_token %}
+    <label>About Me</label>
+    <textarea class="form-control" name="desc" style="height:300px; resize:none;">
+      {{data.Description}}
+    </textarea>
+    <label>Google Map Embed Code</label>
+    <textarea class="form-control" name="map" style="height:300px; resize:none;">
+      {{data.GoogleMap}}
+    </textarea>
+    <br>
+    <label>Profile Picture</label>
+    <input type="file" name="thumb" class="form-control"> <br>
+    <input type="submit" name="submit" value="update" class="btn btn-primary center-block">
+   </form>
+
+    
+     <h1>CV Information</h1>
+     <?php foreach($cv as $cvinfo){} ?>
+   <form action="{% url 'cv' %}" method="post" enctype="multipart/form-data">
+   {% csrf_token %}
+       <input type="text" name="hirelink" value="{{cvinfo.Hirelink}}" placeholder="Hire Link" class="form-control" required>
+       <input type="file" name="cv" class="form-control"> <br>
+       <input type="submit" name="submit" value="CV Update" class="btn btn-primary center-block">
+       <span>{{cvinfo.Cvfile}}</span>
+   </form>
+</div>
+<div class="col-md-3">
+<img src="/upload/{{data.ProfileImage}}" style="width:100%;">
+</div>
+{% endblock  %}

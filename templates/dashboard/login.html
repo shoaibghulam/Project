@@ -1,0 +1,92 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+
+
+    <!--====== Required meta tags ======-->
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="{{site.Description}}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!--====== Title ======-->
+    <title>Adminstrator Login</title>
+
+    <!--====== Favicon Icon ======-->
+    <link rel="shortcut icon" href="/upload/{{site.SiteFavicon}}" type="image/png">
+
+    <!--====== Bootstrap css ======-->
+    <link rel="stylesheet" href="{% static '' %}public/css/bootstrap.min.css">
+
+
+    <!--====== Style css ======-->
+    <link rel="stylesheet" href="{% static '' %}login.css">
+
+    <script src="{% static '' %}public/js/vendor/jquery-1.12.4.min.js"></script>
+    <script src="{% static '' %}public/js/bootstrap.min.js"></script>
+    <script src="{% static '' %}public/js/jquery.form.js"></script>
+</head>
+
+
+<body>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+          <div class="card card-signin my-5">
+            <div class="card-body">
+              <h5 class="card-title text-center">Administrator Sign In</h5>
+              <form class="form-signin" id="login" action="{% url 'loginprocess' %}" method="POST">
+                  {% csrf_token %}
+                <div class="form-label-group">
+                  <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" required autofocus>
+                  <label for="inputEmail">Email address</label>
+                </div>
+  
+                <div class="form-label-group">
+                  <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+                  <label for="inputPassword">Password</label>
+                </div>
+  
+               
+                <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
+                <hr class="my-4">
+               </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+      
+          <!-- Modal content-->
+          <div class="modal-content">
+            
+            <div class="modal-body">
+              <p id="showmsg"></p>
+            </div>
+          
+          </div>
+      
+        </div>
+      </div>
+    <script>
+        $(document).ready(function(){
+            $('#login').ajaxForm(function(data){
+                if(data =='login'){
+                    window.location.replace("dashboard");
+                    
+                }
+                else{
+                $('#myModal').modal('show');
+               $('#showmsg').html(data)
+               setInterval(function(){
+                $('#myModal').modal('hide');
+               }, 3000 );
+                }
+            })
+        })
+    </script>
+  </body>

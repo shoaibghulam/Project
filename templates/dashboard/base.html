@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Deshboard</title>
+    <!--CSS Links --> 
+    <link rel="stylesheet" href="{% static '' %}bootstrap.css">
+   <link rel="stylesheet" href="{% static '' %}admin/css/style.css">
+    <script src="{% static '' %}admin/js/jquery-3.3.1.min.js"></script>
+    <script src="{% static '' %}admin/js/bootstrap.js"></script>
+    <script src="{% static '' %}admin/js/jquery.form.js"></script>
+     <!-- Inserting TMC plugin for textarea-->
+      
+     
+</head>
+<body>
+ <!--Navegation-->
+
+    <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{% url 'dashboard' %}">GS King</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="{% url 'dashboard' %}">Home <span class="sr-only">(current)</span></a></li>
+        <li><a href="{% url 'services' %}">Services</a></li>
+       
+         <li><a href="{% url 'work' %}">Works</a></li>
+         <li><a href="{% url 'skill' %} ">Skills</a></li>
+         <li><a href="{% url 'contact' %} ">contact</a></li>
+        <li><a href="{% url 'setting' %}">Setting</a></li>
+          <li><a href="/" target="_blank">View</a></li>
+      
+       
+      </ul>
+     
+      <ul class="nav navbar-nav navbar-right">
+        
+        <li><a href="{% url 'logout' %}">logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav> <!--/Navegation-->
+{% comment %} left navegation start {% endcomment %}
+<!--Dishboard-->
+<section class="container-fluid">
+
+<div>
+
+ <div class="row">
+ <!--left nav-->
+ 
+    <div class="col-md-3">
+    <div class="list-group">
+  <a href="#" class="list-group-item active" style="font-size:30px;">
+    <i class=" glyphicon glyphicon-dashboard"></i> Dashboard 
+     
+  </a>
+  <a href="{% url 'work' %}" class="list-group-item">Works</a>
+<a href=" {% url 'skill' %}" class="list-group-item">Skills</a>
+<a href=" {% url 'services' %}" class="list-group-item">Services</a>
+<a href=" {% url 'contact' %}" class="list-group-item">Contact</a>
+<a href="{% url 'setting' %}" class="list-group-item">Setting</a>
+<a href="<?php echo base_url('Home'); ?>" class="list-group-item" target="_blank">View</a>
+ 
+</div>
+      </div> <!--/left nav-->
+{% comment %} left navegation end{% endcomment %}
+
+
+ {% block  body %}
+
+ {% endblock  %}
+ </div>
+
+
+
+{% comment %} main body start  {% endcomment %}
+
+{% comment %} main body end {% endcomment %}
+
+{% comment %} footer start {% endcomment %}
+{% block script %}
+  
+{% endblock script %}
+<footer class="col-md-12">
+    <p>Copyright &copy; 2017. All Rights Reserved</p>
+</footer>
+</body>
+
+
+</body>
+</html>
+{% comment %} footer end {% endcomment %}

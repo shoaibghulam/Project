@@ -1,0 +1,210 @@
+{% extends 'dashboard/base.html' %}
+{% block body %}
+
+<!--admin body-->
+
+         <div class="col-md-8">
+   
+    
+   <table class="table table-striped">
+    <thead>
+      <tr>
+        
+        <th>Name</th>
+        <th>email</th>
+        <th>Delete</th>
+        <th>View</th>
+        
+      </tr>
+    </thead>
+    <tbody id="msgdata">
+        
+    </tbody>
+  </table>
+  {% if data.has_other_pages %}
+  <nav aria-label="...">
+    <ul class="pagination center-block">
+  
+    {% for i in data.paginator.page_range %}
+      {% if data.number == i %}
+      <li class="page-item active">
+        <a class="page-link" href="#" onclick="pages({{i}})">{{i}} <span class="sr-only">(current)</span></a>
+      </li>
+      {% else %}
+      <li class="page-item"><a class="page-link" href="#" onclick="pages({{i}})">{{i}}</a></li>
+      {% endif %}
+    {% endfor %} 
+   
+    </ul>
+  </nav>
+  {% endif %}
+ </div>
+
+<!--End Category Start-->
+</div><!--/admin body-->
+
+<!-- Modal -->
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Message</h4>
+        </div>
+        <div class="modal-body">
+          <p id="msg"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+  <!-- Delete Model start -->
+  <div id="deleteModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        
+        <div class="modal-body">
+          <p>Message has been Deleted</p>
+        </div>
+      
+      </div>
+  
+    </div>
+  </div>
+  <!-- Delete Model end -->
+{% endblock %}
+{% block script %}
+<script>
+  setInterval(() => {
+    showcontact()
+  }, 10000);
+    $(document).ready(function(){
+      showcontact()
+      
+     
+    });
+    // end ready function
+function viewdata(x){
+    
+    $.ajax({
+        url:'viewmsg',
+        type:'GET',
+        data:{'id':x},
+        success: function(data){
+           
+            $('#msg').html(data)
+            showcontact()
+        }
+    });
+}
+function deletedata(x){
+    $.ajax({
+        url:'deletemsg',
+        type:'GET',
+        data:{'id':x},
+        success: function(data){
+          showcontact()
+          $('#deleteModal').modal('show')
+          setInterval(function(){ 
+           $('#deleteModal').modal('hide');
+       }, 3000);
+        }
+    });
+}
+// show message
+function showcontact(){
+  var element="";
+  $.ajax({
+    url:'contactshow',
+    type:'GET',
+    success:function(data){
+     datas = eval(data)
+     for(x=0 ;x<datas.length; x++){
+      if(datas[x].MarkTime == 0){
+        element +=`
+        <tr>
+           
+           <th>${datas[x].ContactName}</th>
+           <th>${datas[x].ContactEmail}</th>
+           <th><a href="javascript:void(0)" onclick="deletedata(${datas[x].ContactId})">Delete</a> </th>
+           <th><a href="javascript:void(0)" onclick="viewdata(${datas[x].ContactId})" data-toggle="modal" data-target="#myModal">View</a> </th>
+           
+       </tr>
+        
+        `;
+      }
+      else{
+        element +=`
+        <tr>
+           
+           <td>${datas[x].ContactName}</td>
+           <td>${datas[x].ContactEmail}</td>
+           <td><a href="javascript:void(0)" onclick="deletedata(${datas[x].ContactId})">Delete</a> </th>
+           <td><a href="javascript:void(0)" onclick="viewdata(${datas[x].ContactId})" data-toggle="modal" data-target="#myModal">View</a> </td>
+           
+       </tr>
+        
+        `;
+      }
+       
+     }
+     $('#msgdata').html(element);
+    }
+   
+  });
+}
+// pagination
+function pages(y){
+ 
+  var element="";
+  $.ajax({
+    url:'contactshow',
+    type:'GET',
+    data:{'page':y},
+
+    success:function(data){
+     datas = eval(data)
+     for(x=0 ;x<datas.length; x++){
+      if(datas[x].MarkTime == 0){
+        element +=`
+        <tr>
+           
+           <th>${datas[x].ContactName}</th>
+           <th>${datas[x].ContactEmail}</th>
+           <th><a href="javascript:void(0)" onclick="deletedata(${datas[x].ContactId})">Delete</a> </th>
+           <th><a href="javascript:void(0)" onclick="viewdata(${datas[x].ContactId})" data-toggle="modal" data-target="#myModal">View</a> </th>
+           
+       </tr>
+        
+        `;
+      }
+      else{
+        element +=`
+        <tr>
+           
+           <td>${datas[x].ContactName}</td>
+           <td>${datas[x].ContactEmail}</td>
+           <td><a href="javascript:void(0)" onclick="deletedata(${datas[x].ContactId})">Delete</a> </th>
+           <td><a href="javascript:void(0)" onclick="viewdata(${datas[x].ContactId})" data-toggle="modal" data-target="#myModal">View</a> </td>
+           
+       </tr>
+        
+        `;
+      }
+       
+     }
+     $('#msgdata').html(element);
+    }
+   
+  });
+}
+</script>
+{% endblock script %}

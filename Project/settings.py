@@ -26,7 +26,7 @@ SECRET_KEY = 'vl@)j*bshu&skx2015ylx^l__y7i9^mjjj*y0ux27i@xpzfok!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['45.15.25.119','www.elegantdesigningstudio.com','https://www.elegantdesigningstudio.com','elegantdesigningstudio.com']
+ALLOWED_HOSTS = ['45.15.25.119','www.elegantdesigningstudio.com']
 
 
 # Application definition
@@ -119,11 +119,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
 STATIC_URL = '/static/'
 STATIC_ROOT=os.path.join(BASE_DIR,"/static/")
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 MEDIA_ROOT= os.path.join(BASE_DIR ,'upload')
 MEDIA_URL='/upload/'
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
